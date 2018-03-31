@@ -1,0 +1,41 @@
+/*
+https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/math/SafeMath.
+*/
+
+import "github.com/OpenZeppelin/zeppelin-solidity/contracts/math/SafeMath.sol"; 
+pragma solidity ^0.4.13;
+
+contract Voting {
+    
+    using SafeMath for uint;
+    uint[]candidateList;
+   
+    mapping (uint =>uint) public candidates;
+    mapping (address => bool) public voted;
+
+    modifier isValidCandidates(uint candidatesID){
+        require(candidatesID>=0 && candidatesID<3);
+        _;
+    }
+   
+    
+    
+    modifier hasNotVoted(){
+        require(!voted[msg.sender]);
+        _;
+    }
+    
+    function Voting()  {
+        candidates[0] = 0;
+        candidates[1] = 0;
+        candidates[2] = 0;
+        candidateList = [0,0,0];
+    }
+    
+    function vote(uint candidatesID) public isValidCandidates(candidatesID){
+        
+        candidates[candidatesID]= candidates[candidatesID].add(1);
+        voted[msg.sender]= true ;
+    
+    }
+}
